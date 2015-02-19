@@ -16,4 +16,10 @@ class XPathTextExtractor(XPathExtractor):
 	Whole text extractor.
 	"""
 	def __init__(self, *args, **kwargs):
-		super(XPathTextExtractor, self).__init__('.//text()', multiple=False, merge=True, merge_joiner=' ', *args, **kwargs)
+		default = {
+			'merge': True,
+			'multiple': False,
+			'merge_joiner': ' '
+		}
+		default.update(kwargs)
+		super(XPathTextExtractor, self).__init__('.//text()', *args, **default)

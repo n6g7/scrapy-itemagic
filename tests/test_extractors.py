@@ -2,38 +2,73 @@ from itemagic import extractors
 import scrapy
 import unittest
 
-class TestExtractors(unittest.TestCase):
-	def test_const(self):
-		val = 23
-		ce = extractors.ConstExtractor(val)
-		self.assertEqual(ce.extract('heyheyhey'), val)
-	def test_const_process(self):
-		val = 4
-		ce = extractors.ConstExtractor(val, process=lambda x: x*x)
-		self.assertEqual(ce.extract('lol', 42), val**2)
-	def test_url(self):
-		url = 'http://duckduckgo.com'
-		resp = scrapy.http.Response(url)
-		ue = extractors.UrlExtractor()
-		self.assertEqual(ue.extract(resp), url)
-	def test_url_process(self):
-		url = 'http://duckduckgo.com'
-		resp = scrapy.http.Response(url)
-		ue = extractors.UrlExtractor(process=lambda x: x[:5])
-		self.assertEqual(ue.extract(resp), url[:5])
-	def test_xpath(self):
-		sel = scrapy.selector.Selector(text='<html><body><span>good</span><span>bad</span></body></html>')
-		xe = extractors.XPathExtractor('//span/text()', multiple=True)
-		self.assertEqual(xe.extract(sel), ['good', 'bad'])
-	def test_xpath_process(self):
-		sel = scrapy.selector.Selector(text='<html><body><span>good</span><span>bad</span></body></html>')
-		xe = extractors.XPathExtractor('//span/text()', merge=True, process=lambda x: x*2)
-		self.assertEqual(xe.extract(sel), 'goodbadgoodbad')
-	def test_text_xpath(self):
-		sel = scrapy.selector.Selector(text='<html><body><span>good</span><span>bad</span></body></html>')
-		xte = extractors.XPathTextExtractor()
-		self.assertEqual(xte.extract(sel), 'good bad')
-	def test_text_xpath_process(self):
-		sel = scrapy.selector.Selector(text='<html><body><span>good</span><span>bad</span></body></html>')
-		xte = extractors.XPathTextExtractor(process=lambda x: x.replace('o', 'a'))
-		self.assertEqual(xte.extract(sel), 'gaad bad')
+class TestExtractor(object):
+	extractor = None
+	extractor_args = None
+	extract_args = None
+	expected = None
+	process = None
+
+	def test_single(self):
+		"""returns the first match"""
+		ext = self.extractor(*self.extractor_args)
+		self.assertEqual(ext.extract(self.extract_args), self.expected['single'])
+
+	def test_multiple(self):
+		"""returns list of results"""
+		ext = self.extractor(*self.extractor_args, multiple=True)
+		self.assertEqual(ext.extract(self.extract_args), self.expected['multiple'])
+
+	def test_merge(self):
+		"""returns concatenated results"""
+		ext = self.extractor(*self.extractor_args, merge=True)
+		self.assertEqual(ext.extract(self.extract_args), self.expected['merge'])
+
+	def test_process(self):
+		"""returns processed result(s)"""
+		ext = self.extractor(*self.extractor_args, process=self.process)
+		self.assertEqual(ext.extract(self.extract_args), self.process(self.expected['single']))
+
+class TestConst(unittest.TestCase, TestExtractor):
+	extractor = extractors.ConstExtractor
+	extractor_args = [23]
+	extract_args = 'random'
+	expected = {
+		'single': 23,
+		'multiple': [23],
+		'merge': 23,
+	}
+	process = lambda s,x: x*2
+
+class TestUrl(unittest.TestCase, TestExtractor):
+	extractor = extractors.UrlExtractor
+	extractor_args = []
+	extract_args = scrapy.http.Response('http://duckduckgo.com')
+	expected = {
+		'single': 'http://duckduckgo.com',
+		'multiple': ['http://duckduckgo.com'],
+		'merge': 'http://duckduckgo.com',
+	}
+	process = lambda s,x: x[:5]
+
+class TestXPath(unittest.TestCase, TestExtractor):
+	extractor = extractors.XPathExtractor
+	extractor_args = ['//span/text()']
+	extract_args = scrapy.selector.Selector(text='<html><body>Hello<span>good</span><span>bad</span></body></html>')
+	expected = {
+		'single': 'good',
+		'multiple': ['good', 'bad'],
+		'merge': 'goodbad',
+	}
+	process = lambda s,x: x*2
+
+class TestTextXPath(unittest.TestCase, TestExtractor):
+	extractor = extractors.XPathTextExtractor
+	extractor_args = []
+	extract_args = scrapy.selector.Selector(text='<html><body>Hello<span>good</span><span>bad</span></body></html>')
+	expected = {
+		'single': 'Hello good bad',
+		'multiple': ['Hello', 'good', 'bad'],
+		'merge': 'Hello good bad',
+	}
+	process = lambda s,x: x.replace('o', 'a')
