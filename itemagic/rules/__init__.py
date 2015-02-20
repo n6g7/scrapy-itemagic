@@ -1,3 +1,3 @@
 from const import ConstRule
 from url import UrlRule
-from xpath import XPathRule, XPathTextRule
+from xpath import XPathRule, XPathTextRule, SubPathRule
