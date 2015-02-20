@@ -11,5 +11,5 @@ class Parser(object):
 
 	def build(self, item, response):
 		for rule in self.rules:
-			item = rule.affect(item, Context.from_response(response))
+			item = rule.affect(item, Context(response))
 		return item

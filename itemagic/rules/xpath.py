@@ -1,8 +1,5 @@
 from base import MetaRule, ExtractorRule
 from itemagic.extractors import XPathExtractor, XPathTextExtractor
-from itemagic.parser import Context
-from scrapy.http import TextResponse
-from scrapy.selector import Selector
 
 class XPathRule(ExtractorRule):
 	extractor = XPathExtractor
@@ -17,5 +14,4 @@ class SubPathRule(MetaRule):
 		super(SubPathRule, self).__init__(*args)
 
 	def affect(self, item, context):
-		context.xpath(self.path)
-		return super(SubPathRule, self).affect(item, context)
+		return super(SubPathRule, self).affect(item, context.xpath(self.path))

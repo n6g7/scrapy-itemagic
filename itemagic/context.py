@@ -1,17 +1,26 @@
 from scrapy.http import TextResponse
 
-class Context(TextResponse):
-	@classmethod
-	def from_response(cls, response):
-		kwargs = {}
-		for k,v in response.__dict__.iteritems():
-			if k.startswith('_'):
-				if k.startswith('_cached_'):
-					continue
-				k = k[1:]
-			kwargs[k] = v
-		return cls(**kwargs)
+class Context(object):
+
+	def __init__(self, response, selector=None, paths=[]):
+		self.response = response
+		self.selector = selector or response.selector
+		self.paths = paths
+
+	def __iter__(self):
+		for x in self.selector:
+			yield x
+
+	def __str__(self):
+		return '<%s %r %s>' % (self.response.status, self.paths, self.selector)
+	__repr__ = __str__
+
+	@property
+	def url(self):
+		return self.response.url
 
 	def xpath(self, path):
-		self._cached_selector = self.selector.xpath(path)
-		return self._cached_selector
+		return self.__class__(self.response, self.selector.xpath(path), paths=self.paths+[path])
+
+	def extract(self):
+		return self.selector.extract()
