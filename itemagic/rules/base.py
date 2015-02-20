@@ -10,9 +10,10 @@ class MetaRule(BaseRule):
 	"""MetaRule
 	Rule applying sub-rules.
 	"""
+	rule_class = BaseRule
 
 	def __init__(self, *args):
-		self.rules = [r for r in args if isinstance(r, BaseRule)]
+		self.rules = [r for r in args if isinstance(r, self.rule_class)]
 
 	def affect(self, item, context):
 		for rule in self.rules:
