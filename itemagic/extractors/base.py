@@ -2,14 +2,14 @@ class BaseExtractor(object):
 	"""BaseExtractor
 	Interface definition.
 	"""
-	def __init__(self, process=None, multiple=False, merge=False, merge_joiner='', *args, **kwargs):
+	def __init__(self, process=None, multiple=False, merge=False, merge_joiner=''):
 		self.process = process if callable(process) else lambda x: x
 		self.multiple = multiple
 		self.merge = merge
 		self.merge_joiner = merge_joiner
 
-	def extract(self, *args, **kwargs):
-		res = self._extract(*args, **kwargs)
+	def extract(self, context):
+		res = self._extract(context)
 		if type(res) in (list, tuple):
 			if self.multiple:
 				return [self.process(x) for x in res]
@@ -23,5 +23,5 @@ class BaseExtractor(object):
 			res = self.process(res)
 			return [res] if self.multiple else res
 
-	def _extract(self, *args, **kwargs):
+	def _extract(self, context):
 		raise NotImplementedError('%s does not override the "_extract" method.' % self.__class__.__name__)
