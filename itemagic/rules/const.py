@@ -1,5 +1,5 @@
-from base import BaseRule
+from base import ExtractorRule
 from itemagic.extractors import ConstExtractor
 
-class ConstRule(BaseRule):
+class ConstRule(ExtractorRule):
 	extractor = ConstExtractor

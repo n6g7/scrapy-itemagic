@@ -1,19 +1,50 @@
 class BaseRule(object):
 	"""BaseRule
-	Sets one of the item's attribute given a field name and an extractor.
+	Rule skeleton : changes an item in some way.
 	"""
+
+	def affect(self, item, context):
+		raise NotImplementedError()
+
+class MetaRule(BaseRule):
+	"""MetaRule
+	Rule applying sub-rules.
+	"""
+
+	def __init__(self, *args):
+		self.rules = [r for r in args if isinstance(r, BaseRule)]
+
+	def affect(self, item, context):
+		for rule in self.rules:
+			item = rule.affect(item, context)
+		return item
+
+class FieldRule(BaseRule):
+	"""FieldRule
+	Sets the value of one of the item's fields.
+	"""
+
+	def __init__(self, field):
+		self.field = field
+
+	def affect(self, item, context):
+		item[self.field] = self.get_field_value(context)
+		return item
+
+	def get_field_value(self, context):
+		raise NotImplementedError('%r does not provide an extractor or overrides the default #affect method.' % self.__class__)
+
+class ExtractorRule(FieldRule):
 	# Extractor class to use
 	extractor = None
-
+	
 	def __init__(self, field, *args, **kwargs):
-		self.field = field
+		super(ExtractorRule, self).__init__(field)
 		# If an extractor class was provided, instantiate it.
-		self.de = self.extractor(*args, **kwargs) if self.extractor is not None else None
-
-	def affect(self, item, *args, **kwargs):
-		# Use the extractor if possible.
-		if self.de is not None:
-			item[self.field] = self.de.extract(*args, **kwargs)
-			return item
+		if self.extractor is not None:
+			self.de = self.extractor(*args, **kwargs)
 		else:
-			raise NotImplementedError('%r does not provide an extractor or overrides the default #affect method.' % self.__class__)
+			raise NotImplementedError('%s doesn\'t provide an extractor class.' % self.__class__)
+
+	def get_field_value(self, context):
+		return self.de.extract(context)
