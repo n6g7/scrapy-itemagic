@@ -29,7 +29,7 @@ def parse_xpath_rule(line):
 			return MapRule(line[0], XPathExtractor(line[1]), *maps)
 	print 'Unknown rule : %r' % (line,)
 
-def magic(const=None, url=None, xpath=None, *args):
+def itemagic(const=None, url=None, xpath=None, *args):
 	rules = []
 
 	# Build const rules
