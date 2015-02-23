@@ -5,7 +5,7 @@ def read(path):
 		return f.read()
 
 setup(name='scrapy-itemagic',
-	version='0.1a',
+	version='0.1',
 	description='Scrapy item parsing tools.',
 	long_description=read('README.md'),
 	author='as0n',
