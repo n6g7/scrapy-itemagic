@@ -23,6 +23,9 @@ class MapRule(MetaRule):
 		self.elements_path = elements_path
 		self.label_extractor = label_extractor
 
+	def __repr__(self):
+		return super(MapRule, self).__repr__(' %r' % self.elements_path)
+
 	def affect(self, item, context):
 		for el in context.xpath(self.elements_path):
 			label = self.label_extractor.extract(el)

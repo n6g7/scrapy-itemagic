@@ -8,6 +8,12 @@ class BaseExtractor(object):
 		self.merge = merge
 		self.merge_joiner = merge_joiner
 
+	def __str__(self):
+		return ''
+
+	def __repr__(self):
+		return '<%s %r>' % (self.__class__.__name__, str(self))
+
 	def extract(self, context):
 		res = self._extract(context)
 		if type(res) in (list, tuple):

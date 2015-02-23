@@ -5,9 +5,14 @@ class XPathExtractor(BaseExtractor):
 	Uses its XPath selector to extract data from an XML document.
 	Handles merging (concatenation) several results and returning multiple results.
 	"""
+
 	def __init__(self, xpath, **kwargs):
 		super(XPathExtractor, self).__init__(**kwargs)
 		self.xpath = xpath
+
+	def __str__(self):
+		return self.xpath
+
 	def _extract(self, context):
 		return context.xpath(self.xpath).extract()
 

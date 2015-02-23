@@ -3,6 +3,9 @@ class BaseRule(object):
 	Rule skeleton : changes an item in some way.
 	"""
 
+	def __repr__(self, more=''):
+		return '<%s%s>' % (self.__class__.__name__, more)
+
 	def affect(self, item, context):
 		raise NotImplementedError()
 
@@ -28,6 +31,9 @@ class FieldRule(BaseRule):
 	def __init__(self, field):
 		self.field = field
 
+	def __repr__(self, more=''):
+		return super(FieldRule, self).__repr__('[%s]%s' % (self.field, more))
+
 	def affect(self, item, context):
 		item[self.field] = self.get_field_value(context)
 		return item
@@ -46,6 +52,10 @@ class ExtractorRule(FieldRule):
 			self.de = self.extractor(*args, **kwargs)
 		else:
 			raise NotImplementedError('%s doesn\'t provide an extractor class.' % self.__class__)
+
+	def __repr__(self):
+		extra = str(self.de)
+		return super(ExtractorRule, self).__repr__(' %r' % extra if len(extra) > 0 else '')
 
 	def get_field_value(self, context):
 		return self.de.extract(context)

@@ -13,5 +13,8 @@ class SubPathRule(MetaRule):
 		self.path = path
 		super(SubPathRule, self).__init__(*args)
 
+	def __repr__(self):
+		return super(SubPathRule, self).__repr__(' %r' % self.path)
+
 	def affect(self, item, context):
 		return super(SubPathRule, self).affect(item, context.xpath(self.path))
