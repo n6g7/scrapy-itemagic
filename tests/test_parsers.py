@@ -1,5 +1,4 @@
-from itemagic import extractors, rules
-from itemagic.magic import magic
+from itemagic import itemagic, extractors, rules
 from itemagic.parser import Parser
 import scrapy
 import unittest
@@ -37,7 +36,7 @@ class TestParser(unittest.TestCase):
 		})
 
 	def test_two(self):
-		parser = magic(
+		parser = itemagic(
 			url='urlField',
 			const=(
 				('constField',	'constVal'),
@@ -61,4 +60,19 @@ class TestParser(unittest.TestCase):
 			'sub': 'good',
 			'map1': 'good',
 			'map2': 'bad'
+		})
+
+	def test_describe(self):
+		parser = itemagic(
+			const={
+				'constField': 'constVal',
+				'const2': 'ccc'
+			},
+			xpath=(
+				('xpathField',	'//body//text()'),
+			)
+		)
+		self.assertEqual(parser.describe(), {
+			'constField': 'constVal',
+			'const2': 'ccc'
 		})
