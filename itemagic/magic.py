@@ -36,6 +36,9 @@ def itemagic(const=None, url=None, xpath=None, *args):
 	if is_list(const):
 		for line in const:
 			rules.append(ConstRule(line[0], line[1]))
+	elif isinstance(const, dict):
+		for field in const:
+			rules.append(ConstRule(field, const[field]))
 
 	# Build url rule
 	if is_str(url):
