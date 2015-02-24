@@ -4,7 +4,7 @@ class Context(object):
 
 	def __init__(self, response, selector=None, paths=[]):
 		self.response = response
-		self.selector = selector or response.selector
+		self.selector = selector if selector is not None else response.selector
 		self.paths = paths
 
 	def __iter__(self):
