@@ -47,7 +47,7 @@ class TestParser(unittest.TestCase):
 				)),
 				('xpathField',	'//body//text()',	dict(merge=True, merge_joiner=' ')),
 				('//span', 'text()', (
-					('map1',	('well', 'good', 'enough'),	'text()'),
+					('map1',	('well', 'good', 'enough'),	'text()', dict(process=lambda x:x*2)),
 					('map2',	'bad',						'text()')
 				))
 			)
@@ -58,7 +58,7 @@ class TestParser(unittest.TestCase):
 			'constField': 'constVal',
 			'xpathField': 'Hello good bad',
 			'sub': 'good',
-			'map1': 'good',
+			'map1': 'goodgood',
 			'map2': 'bad'
 		})
 

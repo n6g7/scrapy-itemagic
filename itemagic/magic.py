@@ -25,7 +25,13 @@ def parse_xpath_rule(line):
 			return XPathRule(line[0], line[1], **line[2])
 		# MapRule
 		elif is_list(line[2]):
-			maps = [Map(map_line[0], map_line[1], XPathExtractor(map_line[2])) for map_line in line[2]]
+			maps = []
+			for map_line in line[2]:
+				len_map = len(map_line)
+				if len_map == 3:
+					maps.append(Map(map_line[0], map_line[1], XPathExtractor(map_line[2])))
+				elif len_map == 4:
+					maps.append(Map(map_line[0], map_line[1], XPathExtractor(map_line[2], **map_line[3])))
 			return MapRule(line[0], XPathExtractor(line[1]), *maps)
 	print 'Unknown rule : %r' % (line,)
 
