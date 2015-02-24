@@ -32,7 +32,8 @@ def parse_xpath_rule(line):
 					maps.append(Map(map_line[0], map_line[1], XPathExtractor(map_line[2])))
 				elif len_map == 4:
 					maps.append(Map(map_line[0], map_line[1], XPathExtractor(map_line[2], **map_line[3])))
-			return MapRule(line[0], XPathExtractor(line[1]), *maps)
+			extractor = XPathExtractor(line[1]) if is_str(line[1]) else line[1]
+			return MapRule(line[0], extractor, *maps)
 	print 'Unknown rule : %r' % (line,)
 
 def itemagic(const=None, url=None, xpath=None, *args):
