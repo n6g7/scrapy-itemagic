@@ -62,6 +62,10 @@ class TestXPath(unittest.TestCase, TestExtractor):
 	}
 	process = lambda s,x: x*2
 
+	def test_empty(self):
+		ext = self.extractor('//span/a/text()', multiple=True)
+		self.assertEqual(ext.extract(self.extract_args), [])
+
 class TestTextXPath(unittest.TestCase, TestExtractor):
 	extractor = extractors.XPathTextExtractor
 	extractor_args = []
