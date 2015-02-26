@@ -35,7 +35,12 @@ class FieldRule(BaseRule):
 		return super(FieldRule, self).__repr__('[%s]%s' % (self.field, more))
 
 	def affect(self, item, context):
-		item[self.field] = self.get_field_value(context)
+		val = self.get_field_value(context)
+		if val is not None:
+			if self.field in item and item[self.field] is not None :
+				item[self.field] += ' %s' % val
+			else:
+				item[self.field] = val
 		return item
 
 	def get_field_value(self, context):
