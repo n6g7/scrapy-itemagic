@@ -28,8 +28,9 @@ class FieldRule(BaseRule):
 	Sets the value of one of the item's fields.
 	"""
 
-	def __init__(self, field):
+	def __init__(self, field, join=' '):
 		self.field = field
+		self.join = join
 
 	def __repr__(self, more=''):
 		return super(FieldRule, self).__repr__('[%s]%s' % (self.field, more))
@@ -38,7 +39,7 @@ class FieldRule(BaseRule):
 		val = self.get_field_value(context)
 		if val is not None:
 			if self.field in item and item[self.field] is not None :
-				item[self.field] += ' %s' % val
+				item[self.field] += '%s%s' % (self.join, val)
 			else:
 				item[self.field] = val
 		return item
@@ -51,7 +52,7 @@ class ExtractorRule(FieldRule):
 	extractor = None
 	
 	def __init__(self, field, *args, **kwargs):
-		super(ExtractorRule, self).__init__(field)
+		super(ExtractorRule, self).__init__(field, kwargs.pop('join', None))
 		# If an extractor class was provided, instantiate it.
 		if self.extractor is not None:
 			self.de = self.extractor(*args, **kwargs)
