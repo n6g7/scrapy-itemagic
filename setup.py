@@ -5,7 +5,7 @@ def read(path):
 		return f.read()
 
 setup(name='scrapy-itemagic',
-	version='0.2.3',
+	version='0.2.4',
 	description='Scrapy item parsing tools.',
 	long_description=read('README.md'),
 	author='as0n',
@@ -18,7 +18,7 @@ setup(name='scrapy-itemagic',
 		'itemagic.rules'
 	],
 	install_requires=[
-		'Scrapy>=0.24.4'
+		'Scrapy>=0.24.6'
 	],
 	extras_require={
 		'test': ['green']
