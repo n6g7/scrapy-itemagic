@@ -1,2 +1,2 @@
-Scrapy==0.24.4
+Scrapy==0.24.6
 green==1.7.1

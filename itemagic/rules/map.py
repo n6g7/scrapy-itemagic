@@ -1,8 +1,8 @@
 from base import MetaRule, FieldRule
 
 class Map(FieldRule):
-	def __init__(self, field, keywords, data_extractor):
-		super(Map, self).__init__(field)
+	def __init__(self, field, keywords, data_extractor, **kwargs):
+		super(Map, self).__init__(field, **kwargs)
 		if isinstance(keywords, (list, tuple)):
 			self.keywords = keywords
 		else:
