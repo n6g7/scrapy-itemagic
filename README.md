@@ -1,9 +1,9 @@
 # scrapy-itemagic
 Item parsing tools for Scrapy
 
-[![Latest Version](https://pypip.in/version/scrapy-itemagic/badge.svg)](https://pypi.python.org/pypi/scrapy-itemagic/)
-[![Downloads](https://pypip.in/download/scrapy-itemagic/badge.svg)](https://pypi.python.org/pypi/scrapy-itemagic/)
-[![Development Status](https://pypip.in/status/scrapy-itemagic/badge.svg)](https://pypi.python.org/pypi/scrapy-itemagic/)
+[![Latest Version](https://img.shields.io/pypi/v/scrapy-itemagic.svg)](https://pypi.python.org/pypi/scrapy-itemagic/)
+[![Downloads](https://img.shields.io/pypi/dm/scrapy-itemagic.svg)](https://pypi.python.org/pypi/scrapy-itemagic/)
+[![Development Status](https://img.shields.io/pypi/status/scrapy-itemagic.svg)](https://pypi.python.org/pypi/scrapy-itemagic/)
 
 ## Examples
 [TODO]
